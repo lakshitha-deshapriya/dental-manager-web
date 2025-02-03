@@ -12,9 +12,10 @@
             <thead>
               <tr>
                 <th style="width: 5%;">#</th>
-                <th style="width: 25%;">Mobile Number</th>
-                <th style="width: 35%;">Patient Name</th>
-                <th style="width: 35%;">Treatment</th>
+                <th style="width: 20%;">Mobile Number</th>
+                <th style="width: 30%;">Patient Name</th>
+                <th style="width: 30%;">Treatment</th>
+                <th style="width: 15%;">Arrived</th>
               </tr>
             </thead>
             <tbody>
@@ -23,6 +24,9 @@
                 <td>{{ appointment.patient.mobileNumber }}</td>
                 <td>{{ appointment.patient.patientName }}</td>
                 <td>{{ appointment.treatment.treatment }}</td>
+                <td [ngClass]="{ 'arrived': appointment.visited, 'not-arrived': !appointment.visited }">
+                  {{ appointment.visited ? 'Arrived' : 'Not Arrived' }}
+                </td>
               </tr>
             </tbody>
           </table>
