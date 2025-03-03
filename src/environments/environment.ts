@@ -12,8 +12,8 @@ export const environment = {
         measurementId: "G-R2V3XSZ3K7"
     },
     collectionPaths: {
-        appointments: `env/${env}/appointments`,
-        patients: `env/${env}/patients`,
-        treatments: `env/${env}/treatments`
+        appointments: `${env}/appointmentsDoc/appointments`,
+        patients: `${env}/patientsDoc/patients`,
+        treatments: `${env}/treatmentsDoc/treatments`
     }
 };
