@@ -123,4 +123,55 @@ export class StartupService {
     await waitForDataLoad;
     return this.appointments;
   }
+
+  async searchAppointmentsByDate(searchDate: string): Promise<Map<string, Appointment[]>> {
+    try {
+      const appointmentOb = this.firebaseService.getAppointmentsByDate(environment.collectionPaths.appointments, searchDate);
+      
+      return new Promise((resolve, reject) => {
+        appointmentOb.subscribe({
+          next: (appointmentsArray) => {
+            const appointmentsList = appointmentsArray.map(appointmentModel => {
+              const treatment = this.treatments.get(appointmentModel.treatmentId) as TreatmentModel;
+              const patient = this.patients.get(appointmentModel.patientId) as PatientModel;
+              
+              if (treatment && patient) {
+                return new Appointment(
+                  appointmentModel.id,
+                  treatment,
+                  patient,
+                  new Date(appointmentModel.date),
+                  appointmentModel.appointmentNumber,
+                  appointmentModel.isDone,
+                  appointmentModel.visited,
+                  true
+                );
+              } else {
+                console.warn(`Missing treatment or patient for appointment ${appointmentModel.id}`);
+                return null;
+              }
+            }).filter(appointment => appointment !== null) as Appointment[];
+
+            appointmentsList.sort((a, b) => {
+              const dateComparison = a.date.getTime() - b.date.getTime();
+              if (dateComparison !== 0) {
+                return dateComparison;
+              }
+              return a.appointmentNo - b.appointmentNo;
+            });
+
+            const groupedAppointments = this.groupAppointmentsByDate(appointmentsList);
+            resolve(groupedAppointments);
+          },
+          error: (error) => {
+            console.error('Error searching appointments:', error);
+            reject(error);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error in searchAppointmentsByDate:', error);
+      throw error;
+    }
+  }
 }

@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:gh-pages": "ng build --configuration production --base-href '/dental-manager-web/' --output-path docs && cp -r docs/browser/* docs/ && touch docs/.nojekyll",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:dental-manager-web": "node dist/dental-manager-web/server/server.mjs"

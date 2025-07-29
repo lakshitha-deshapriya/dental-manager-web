@@ -45,4 +45,29 @@ export class FirebaseService {
 
     return appointmentsObservable;
   }
+
+  getAppointmentsByDate(collectionName: string, targetDate: string): Observable<AppointmentModel[]> {
+    const startDate = new Date(targetDate);
+    startDate.setHours(0, 0, 0, 0);
+    
+    const endDate = new Date(targetDate);
+    endDate.setHours(23, 59, 59, 999);
+
+    const q = query(
+      collection(this.db, collectionName),
+      where('date', '>=', startDate.toISOString()),
+      where('date', '<=', endDate.toISOString())
+    );
+
+    const appointmentsObservable = from(getDocs(q)).pipe( 
+      map((querySnapshot) =>
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as AppointmentModel[]
+      )
+    );
+
+    return appointmentsObservable;
+  }
 }
