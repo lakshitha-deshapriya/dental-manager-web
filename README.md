@@ -36,27 +36,6 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Deployment
-
-This project is automatically deployed to GitHub Pages using GitHub Actions. The deployment happens automatically when you push to the `main` or `master` branch.
-
-### Manual Deployment
-
-If you need to deploy manually, you can run:
-
-```bash
-npm run build:gh-pages
-```
-
-This will build the project with the correct base href for GitHub Pages.
-
-### GitHub Pages Setup
-
-1. Go to your repository settings
-2. Navigate to "Pages" in the sidebar
-3. Under "Source", select "GitHub Actions"
-4. The workflow will automatically deploy your app to `https://your-username.github.io/dental-manager-web/`
-
 ## Running unit tests
 
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
