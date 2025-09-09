@@ -7,6 +7,9 @@
 /bazel-out
 /.vscode
 
+# environment file
+/src/environments/environment*.ts
+
 # Node
 /node_modules
 npm-debug.log
@@ -41,3 +44,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/environments/environment.ts

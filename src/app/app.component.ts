@@ -101,4 +101,24 @@ export class AppComponent implements OnInit {
     this.searchPerformed = false;
     this.cdr.detectChanges();
   }
+
+  getDateStatistics(date: string, appointmentMap: Map<string, Appointment[]>) {
+    const appointments = appointmentMap.get(date) || [];
+    
+    return {
+      total: appointments.length,
+      ongoing: appointments.filter(apt => apt.status === 'inProgress' || apt.status === 'arrived').length,
+      completed: appointments.filter(apt => apt.status === 'completed').length,
+      cancelled: appointments.filter(apt => apt.status === 'cancelled').length
+    };
+  }
+
+  getSortedDates(appointmentMap: Map<string, Appointment[]>): string[] {
+    return Array.from(appointmentMap.keys()).sort((a, b) => {
+      // Convert date strings to Date objects for proper comparison
+      const dateA = new Date(a);
+      const dateB = new Date(b);
+      return dateA.getTime() - dateB.getTime();
+    });
+  }
 }

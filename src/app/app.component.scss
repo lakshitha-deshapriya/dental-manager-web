@@ -189,10 +189,114 @@
     }
   }
 
-  .arrived {
-    color: green;
+  // Status styles
+  .status-scheduled {
+    color: #007bff;
+    font-weight: 500;
   }
   
-  .not-arrived {
-    color: red;
+  .status-confirmed {
+    color: #28a745;
+    font-weight: 500;
+  }
+  
+  .status-checked-in {
+    color: #17a2b8;
+    font-weight: 500;
+  }
+  
+  .status-in-progress {
+    color: #fd7e14;
+    font-weight: 600;
+  }
+  
+  .status-completed {
+    color: #28a745;
+    font-weight: 600;
+  }
+  
+  .status-cancelled {
+    color: #dc3545;
+    font-weight: 500;
+  }
+  
+  .status-no-show {
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  .status-rescheduled {
+    color: #ffc107;
+    font-weight: 500;
+  }
+
+  // Date header styles
+  .date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 8px 16px;
+    border-radius: 6px;
+    margin: 15px 0 8px 0;
+    border-left: 3px solid #007bff;
+    border: 1px solid #e9ecef;
+
+    .date-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #343a40;
+    }
+
+    .date-stats {
+      display: flex;
+      gap: 12px;
+      
+      .stat-item {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        min-width: 50px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        
+        .stat-label {
+          font-size: 0.65rem;
+          font-weight: 500;
+          margin-bottom: 1px;
+          opacity: 0.8;
+        }
+        
+        .stat-value {
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+        
+        &.total { 
+          background-color: #e3f2fd;
+          color: #1976d2;
+          border: 1px solid #bbdefb;
+        }
+        
+        &.ongoing { 
+          background-color: #fff3e0;
+          color: #f57c00;
+          border: 1px solid #ffcc02;
+        }
+        
+        &.completed { 
+          background-color: #e8f5e8;
+          color: #2e7d32;
+          border: 1px solid #a5d6a7;
+        }
+        
+        &.cancelled { 
+          background-color: #ffebee;
+          color: #c62828;
+          border: 1px solid #ef9a9a;
+        }
+      }
+    }
   }
