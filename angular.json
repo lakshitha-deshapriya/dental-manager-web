@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "dental-manager-web": {
+    "dent-craft-web": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
