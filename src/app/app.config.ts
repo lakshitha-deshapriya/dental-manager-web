@@ -21,13 +21,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     FirebaseService,
     StartupService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => {
-        const startupService = inject(StartupService);
-        return () => startupService.loadData();
-      },
-      multi: true,
-    },
+    provideAppInitializer(() => inject(StartupService).loadData()),
   ]
 };

@@ -1,30 +1,163 @@
 <main class="main">
   <div class="card">
-    <h1>Upcoming Appointments</h1>
-    <div *ngIf="!loading && !hasAppointments">No Appointments</div>
-    <div *ngIf="!loading && hasAppointments">
-      <div *ngFor="let date of appointments.keys()">
-        <h2>{{ date }}</h2>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <button 
+        class="nav-button" 
+        [class.active]="activeTab === 'home'"
+        (click)="switchTab('home')">
+        Home
+      </button>
+      <button 
+        class="nav-button" 
+        [class.active]="activeTab === 'search'"
+        (click)="switchTab('search')">
+        Search
+      </button>
+    </nav>
 
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th style="width: 5%;">#</th>
-                <th style="width: 25%;">Mobile Number</th>
-                <th style="width: 35%;">Patient Name</th>
-                <th style="width: 35%;">Treatment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let appointment of appointments.get(date); let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ appointment.patient.mobileNumber }}</td>
-                <td>{{ appointment.patient.patientName }}</td>
-                <td>{{ appointment.treatment.treatment }}</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- Home Tab Content -->
+    <div *ngIf="activeTab === 'home'" class="tab-content">
+      <h1>Upcomming Appointments</h1>
+      <div *ngIf="loading"><strong>Loading Appointments...</strong></div>
+      <div *ngIf="!loading && !hasAppointments">No Appointments</div>
+      <div *ngIf="!loading && hasAppointments">
+        <div *ngFor="let date of getSortedDates(appointments)">
+          <div class="date-header">
+            <span class="date-title">{{ date }}</span>
+            <div class="date-stats">
+              <span class="stat-item total">
+                <span class="stat-label">Total</span>
+                <span class="stat-value">{{ getDateStatistics(date, appointments).total }}</span>
+              </span>
+              <span class="stat-item ongoing">
+                <span class="stat-label">Ongoing</span>
+                <span class="stat-value">{{ getDateStatistics(date, appointments).ongoing }}</span>
+              </span>
+              <span class="stat-item completed">
+                <span class="stat-label">Completed</span>
+                <span class="stat-value">{{ getDateStatistics(date, appointments).completed }}</span>
+              </span>
+              <span class="stat-item cancelled">
+                <span class="stat-label">Cancelled</span>
+                <span class="stat-value">{{ getDateStatistics(date, appointments).cancelled }}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 5%;">#</th>
+                  <th style="width: 20%;">Mobile Number</th>
+                  <th style="width: 30%;">Patient Name</th>
+                  <th style="width: 30%;">Treatment</th>
+                  <th style="width: 15%;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let appointment of appointments.get(date); let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ appointment.patient.phone || 'N/A' }}</td>
+                  <td>{{ appointment.patient.fullName }}</td>
+                  <td>{{ appointment.treatment.name }}</td>
+                  <td [ngClass]="appointment.statusClass">
+                    {{ appointment.statusDisplay }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Tab Content -->
+    <div *ngIf="activeTab === 'search'" class="tab-content">
+      <h1>Search Appointments</h1>
+      
+      <div class="search-form">
+        <div class="form-group">
+          <label for="searchDate">Select Date:</label>
+          <input 
+            type="date" 
+            id="searchDate"
+            [(ngModel)]="searchDate"
+            class="date-input">
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            class="search-button" 
+            (click)="searchAppointments()"
+            [disabled]="!searchDate || searchLoading">
+            {{ searchLoading ? 'Searching...' : 'Search' }}
+          </button>
+          <button 
+            class="clear-button" 
+            (click)="clearSearch()"
+            [disabled]="searchLoading">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div class="search-results">
+        <div *ngIf="searchLoading"><strong>Searching Appointments...</strong></div>
+        <div *ngIf="!searchLoading && searchPerformed && !hasSearchResults">
+          No appointments found for the selected date.
+        </div>
+        <div *ngIf="!searchLoading && hasSearchResults">
+          <div *ngFor="let date of getSortedDates(searchResults)">
+            <div class="date-header">
+              <span class="date-title">{{ date }}</span>
+              <div class="date-stats">
+                <span class="stat-item total">
+                  <span class="stat-label">Total</span>
+                  <span class="stat-value">{{ getDateStatistics(date, searchResults).total }}</span>
+                </span>
+                <span class="stat-item ongoing">
+                  <span class="stat-label">Ongoing</span>
+                  <span class="stat-value">{{ getDateStatistics(date, searchResults).ongoing }}</span>
+                </span>
+                <span class="stat-item completed">
+                  <span class="stat-label">Completed</span>
+                  <span class="stat-value">{{ getDateStatistics(date, searchResults).completed }}</span>
+                </span>
+                <span class="stat-item cancelled">
+                  <span class="stat-label">Cancelled</span>
+                  <span class="stat-value">{{ getDateStatistics(date, searchResults).cancelled }}</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 5%;">#</th>
+                    <th style="width: 20%;">Mobile Number</th>
+                    <th style="width: 30%;">Patient Name</th>
+                    <th style="width: 30%;">Treatment</th>
+                    <th style="width: 15%;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let appointment of searchResults.get(date); let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ appointment.patient.phone || 'N/A' }}</td>
+                    <td>{{ appointment.patient.fullName }}</td>
+                    <td>{{ appointment.treatment.name }}</td>
+                    <td [ngClass]="appointment.statusClass">
+                      {{ appointment.statusDisplay }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
