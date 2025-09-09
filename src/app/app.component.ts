@@ -14,7 +14,7 @@ import { FirebaseService } from './services/firebase.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  title = 'dental-manager-web';
+  title = 'dent-craft-web';
   private startupService: StartupService = inject(StartupService);
   private firebaseService: FirebaseService = inject(FirebaseService);
   private zone = inject(NgZone);

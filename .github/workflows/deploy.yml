@@ -42,7 +42,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './dist/dental-manager-web/browser'
+        path: './dist/dent-craft-web/browser'
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/master'
