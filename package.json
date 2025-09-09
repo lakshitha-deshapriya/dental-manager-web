@@ -1,14 +1,14 @@
 {
-  "name": "dent-craft-web",
+  "name": "dental-manager-web",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --configuration production --base-href=\"/dent-craft-web/\"",
+    "build:prod": "ng build --configuration production --base-href=\"/dental-manager-web/\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:dent-craft-web": "node dist/dent-craft-web/server/server.mjs"
+    "serve:ssr:dental-manager-web": "node dist/dental-manager-web/server/server.mjs"
   },
   "private": true,
   "dependencies": {
