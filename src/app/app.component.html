@@ -59,7 +59,14 @@
               <tbody>
                 <tr *ngFor="let appointment of appointments.get(date); let i = index">
                   <td>{{ i + 1 }}</td>
-                  <td>{{ appointment.patient.phone || 'N/A' }}</td>
+                  <td>
+                    <a *ngIf="appointment.patient.phone" 
+                       [href]="'tel:' + appointment.patient.phone" 
+                       class="phone-link">
+                      {{ appointment.patient.phone }}
+                    </a>
+                    <span *ngIf="!appointment.patient.phone">N/A</span>
+                  </td>
                   <td>{{ appointment.patient.fullName }}</td>
                   <td>{{ appointment.treatment.name }}</td>
                   <td [ngClass]="appointment.statusClass">
@@ -147,7 +154,14 @@
                 <tbody>
                   <tr *ngFor="let appointment of searchResults.get(date); let i = index">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ appointment.patient.phone || 'N/A' }}</td>
+                    <td>
+                      <a *ngIf="appointment.patient.phone" 
+                         [href]="'tel:' + appointment.patient.phone" 
+                         class="phone-link">
+                        {{ appointment.patient.phone }}
+                      </a>
+                      <span *ngIf="!appointment.patient.phone">N/A</span>
+                    </td>
                     <td>{{ appointment.patient.fullName }}</td>
                     <td>{{ appointment.treatment.name }}</td>
                     <td [ngClass]="appointment.statusClass">

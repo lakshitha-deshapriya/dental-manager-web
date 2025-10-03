@@ -186,6 +186,36 @@
           }
         }
       }
+
+      // Phone link styles
+      .phone-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+
+        &:hover {
+          color: #0056b3;
+          background-color: #e7f3ff;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        &:active {
+          background-color: #cce5ff;
+        }
+
+        // Optional: Add phone icon using ::before
+        &::before {
+          content: "📞";
+          font-size: 0.9em;
+        }
+      }
     }
   }
 
