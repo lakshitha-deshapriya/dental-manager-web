@@ -98,6 +98,117 @@ export class FirebaseService {
     });
   }
 
+  // Get upcoming appointments with related patient and treatment data (OPTIMIZED)
+  getUpcomingAppointmentsWithRelatedData(): Observable<any[]> {
+    return new Observable(observer => {
+      this.getUpcomingAppointments().subscribe(async (appointments) => {
+        try {
+          // Extract unique patient and treatment IDs
+          const patientIds = [...new Set(appointments.map(apt => apt.patientId).filter(id => id))];
+          const treatmentIds = [...new Set(
+            appointments.flatMap(apt => apt.treatmentIds || []).filter(id => id)
+          )];
+
+          // Fetch patients and treatments in parallel
+          const [patients, treatments] = await Promise.all([
+            this.fetchPatientsByIds(patientIds),
+            this.fetchTreatmentsByIds(treatmentIds)
+          ]);
+
+          // Combine data
+          const result = appointments.map(appointment => ({
+            ...appointment,
+            patient: patients.find(p => p.id === appointment.patientId),
+            treatments: (appointment.treatmentIds || [])
+              .map(id => treatments.find(t => t.id === id))
+              .filter(Boolean)
+          }));
+
+          observer.next(result);
+          observer.complete();
+        } catch (error) {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  // Get appointments by date with related data (OPTIMIZED)
+  getAppointmentsByDateWithRelatedData(targetDate: string): Observable<any[]> {
+    return new Observable(observer => {
+      this.getAppointmentsByDate(targetDate).subscribe(async (appointments) => {
+        try {
+          // Extract unique patient and treatment IDs
+          const patientIds = [...new Set(appointments.map(apt => apt.patientId).filter(id => id))];
+          const treatmentIds = [...new Set(
+            appointments.flatMap(apt => apt.treatmentIds || []).filter(id => id)
+          )];
+
+          // Fetch patients and treatments in parallel
+          const [patients, treatments] = await Promise.all([
+            this.fetchPatientsByIds(patientIds),
+            this.fetchTreatmentsByIds(treatmentIds)
+          ]);
+
+          // Combine data
+          const result = appointments.map(appointment => ({
+            ...appointment,
+            patient: patients.find(p => p.id === appointment.patientId),
+            treatments: (appointment.treatmentIds || [])
+              .map(id => treatments.find(t => t.id === id))
+              .filter(Boolean)
+          }));
+
+          observer.next(result);
+          observer.complete();
+        } catch (error) {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  // Get today's appointments with related data (OPTIMIZED)
+  getTodaysAppointmentsWithRelatedData(): Observable<any[]> {
+    const today = new Date().toISOString().split('T')[0];
+    return this.getAppointmentsByDateWithRelatedData(today);
+  }
+
+  // Get appointments by status with related data (OPTIMIZED)
+  getAppointmentsByStatusWithRelatedData(status: AppointmentStatus): Observable<any[]> {
+    return new Observable(observer => {
+      this.getAppointmentsByStatus(status).subscribe(async (appointments) => {
+        try {
+          // Extract unique patient and treatment IDs
+          const patientIds = [...new Set(appointments.map(apt => apt.patientId).filter(id => id))];
+          const treatmentIds = [...new Set(
+            appointments.flatMap(apt => apt.treatmentIds || []).filter(id => id)
+          )];
+
+          // Fetch patients and treatments in parallel
+          const [patients, treatments] = await Promise.all([
+            this.fetchPatientsByIds(patientIds),
+            this.fetchTreatmentsByIds(treatmentIds)
+          ]);
+
+          // Combine data
+          const result = appointments.map(appointment => ({
+            ...appointment,
+            patient: patients.find(p => p.id === appointment.patientId),
+            treatments: (appointment.treatmentIds || [])
+              .map(id => treatments.find(t => t.id === id))
+              .filter(Boolean)
+          }));
+
+          observer.next(result);
+          observer.complete();
+        } catch (error) {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
   private async fetchPatientsByIds(patientIds: string[]): Promise<PatientModel[]> {
     if (patientIds.length === 0) return [];
     

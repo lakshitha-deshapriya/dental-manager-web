@@ -328,11 +328,11 @@ export class AppointmentsListComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.firebaseService.getTodaysAppointments().subscribe({
-      next: (appointments) => {
-        this.appointmentsWithData = appointments.map(apt => ({ ...apt, patient: null, treatments: [] }));
+    this.firebaseService.getTodaysAppointmentsWithRelatedData().subscribe({
+      next: (data) => {
+        this.appointmentsWithData = data;
         this.loading = false;
-        console.log('Today\'s appointments:', appointments);
+        console.log('Today\'s appointments with related data:', data);
       },
       error: (err) => {
         this.error = err.message || 'Failed to load today\'s appointments';
@@ -347,11 +347,11 @@ export class AppointmentsListComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.firebaseService.getUpcomingAppointments().subscribe({
-      next: (appointments) => {
-        this.appointmentsWithData = appointments.map(apt => ({ ...apt, patient: null, treatments: [] }));
+    this.firebaseService.getUpcomingAppointmentsWithRelatedData().subscribe({
+      next: (data) => {
+        this.appointmentsWithData = data;
         this.loading = false;
-        console.log('Upcoming appointments:', appointments);
+        console.log('Upcoming appointments with related data:', data);
       },
       error: (err) => {
         this.error = err.message || 'Failed to load upcoming appointments';
@@ -366,11 +366,11 @@ export class AppointmentsListComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.firebaseService.getAppointmentsByStatus(status as AppointmentStatus).subscribe({
-      next: (appointments) => {
-        this.appointmentsWithData = appointments.map(apt => ({ ...apt, patient: null, treatments: [] }));
+    this.firebaseService.getAppointmentsByStatusWithRelatedData(status as AppointmentStatus).subscribe({
+      next: (data) => {
+        this.appointmentsWithData = data;
         this.loading = false;
-        console.log(`Appointments with status ${status}:`, appointments);
+        console.log(`Appointments with status ${status} and related data:`, data);
       },
       error: (err) => {
         this.error = err.message || `Failed to load ${status} appointments`;
